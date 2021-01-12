@@ -9,6 +9,7 @@
 import pathlib
 import sys
 import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 project_path = str(pathlib.Path(os.path.abspath(__file__)).parent.parent)
 sys.path.append(project_path)

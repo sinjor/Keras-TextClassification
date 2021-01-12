@@ -56,11 +56,21 @@ class graph:
         if self.gpu_memory_fraction:
             # keras, tensorflow控制GPU使用率等
             import tensorflow as tf
-            config = tf.ConfigProto()
-            # config.gpu_options.per_process_gpu_memory_fraction = self.gpu_memory_fraction
+            if tf.__version__[0] == '1':
+                config = tf.ConfigProto()
+            else:
+                config = tf.compat.v1.ConfigProto()
+                            # config.gpu_options.per_process_gpu_memory_fraction = self.gpu_memory_fraction
             config.gpu_options.allow_growth = True
-            sess = tf.Session(config=config)
-            K.set_session(sess)
+            if tf.__version__[0] == '1':
+                sess = tf.Session(config=config)
+            else:
+                sess=tf.compat.v1.Session(config=config) 
+                 
+            if tf.__version__[0] == '1':
+                K.set_session(sess)
+            else:
+                tf.compat.v1.keras.backend.set_session(sess)        
         self.create_model(hyper_parameters)
         if self.is_training: # 是否是训练阶段, 与预测区分开
             self.create_compile()
